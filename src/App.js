@@ -1,15 +1,16 @@
 import { Route, Switch, Redirect } from "react-router-dom";
-import { useState } from "react";
+import React, { Suspense, useState } from "react";
 
 import Header from "./components/Layout/Header";
-import Meals from "./components/Meals/Meals";
 import Cart from "./components/Cart/Cart";
 import CartProvider from "./store/CartProvider";
 
-import Home from "./pages/Home";
 import Footer from "./components/Layout/Footer";
-import ContactForm from "./pages/ContactForm";
+import LoadingSpinner from './components/UI/LoadingSpinner'
 
+const Meals = React.lazy(() => import('./components/Meals/Meals'))
+const Home = React.lazy(() => import('./pages/Home'))
+const ContactForm = React.lazy(() => import('./pages/ContactForm'))
 
 function App() {
   const [cartIsShown, setCartIsShown] = useState(false);
@@ -29,6 +30,7 @@ function App() {
       
         
       <main>
+      <Suspense fallback={ <div className='centered'><LoadingSpinner /></div>}>
         <Switch>
 
         <Route path="/" exact>
@@ -48,7 +50,7 @@ function App() {
           </Route>
 
         </Switch>
-        
+        </Suspense>
       </main>
       <Footer />
       </CartProvider>
